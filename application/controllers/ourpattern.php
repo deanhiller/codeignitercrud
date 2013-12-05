@@ -1,4 +1,4 @@
-<?php
+<?php 
 class Ourpattern extends Controller {
 	public function __construct()
     {
@@ -33,14 +33,9 @@ class Ourpattern extends Controller {
 	{
 		$id=$this->input->post('userid');
 		$data['users']=$this->Ourpattern_model->deleteUser($id);
-		$cookie = array(
-			'name'   => 'successMessage',
-			'value'  => 'Successfully deleted a user.',
-			'expire' => '86500',
-			'domain' => '',
-			'prefix' => ''
-			);
-		set_cookie($cookie);
+
+		$sessionSuccess = array('successMessage' => 'Successfully deleted a user.',);
+		$this->session->set_userdata($sessionSuccess);
 		redirect('ourpattern');
 	}
 	public function postUser()
@@ -51,129 +46,64 @@ class Ourpattern extends Controller {
 		$lName=$this->input->post('lastname');
 		$email=$this->input->post('email');
 		$flgErr=0;
-		if($fName=='')
+		if ($fName == '')
 		{
-			$cookieFnameErr = array(
-				'name'   => 'errFname',
-				'value'  => 'Please enter First Name.',
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
-			set_cookie($cookieFnameErr);
+			$sessionfnameErr = array('firstnameerr' => 'Please enter First Name.',);
+			$this->session->set_userdata($sessionfnameErr);
 			$flgErr=1;
 		}
-		if($lName=='')
+		if ($lName == '')
 		{
-			$cookieLnameErr = array(
-				'name'   => 'errLname',
-				'value'  => 'Please enter Last Name.',
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
-			set_cookie($cookieLnameErr);
+			$sessionlanmeErr = array('lastnameerr' => 'Please enter Last Name.',);
+			$this->session->set_userdata($sessionlanmeErr);
 			$flgErr=1;
 		}
-		if($email=='')
+		if ($email == '')
 		{
-			$cookieEmaileErr = array(
-				'name'   => 'errEmail',
-				'value'  => 'Please enter Email.',
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
-			set_cookie($cookieEmaileErr);
+			$sessionemailErr = array('emailiderr' => 'Please enter Email.',);
+			$this->session->set_userdata($sessionemailErr);
 			$flgErr=1;
 		}
 		else
 		{
 			$regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
-			if (!preg_match($regex, $email)) 
+			if  (!preg_match($regex, $email))
 			{
-				$cookieEmaileErr = array(
-					'name'   => 'errEmail',
-					'value'  => 'Please enter Valid Email.',
-					'expire' => '86500',
-					'domain' => '',
-					'prefix' => ''
-					);
-				set_cookie($cookieEmaileErr);
+				$sessionemailErr = array('emailiderr' => 'Please enter Valid Email.',);
+				$this->session->set_userdata($sessionemailErr);
 				$flgErr=1;
 			}	
 			$emailExistsCount=$this->Ourpattern_model->emailExistsAlready($email,$id);
 			if ($emailExistsCount>0) 
 			{
-				$cookieEmaileErr = array(
-					'name'   => 'errEmail',
-					'value'  => 'Email Already Exists.',
-					'expire' => '86500',
-					'domain' => '',
-					'prefix' => ''
-					);
-				set_cookie($cookieEmaileErr);
+			    $sessionemailErr = array('emailiderr' => 'Email Already Exists.',);
+				
+				$this->session->set_userdata($sessionemailErr);
 				$flgErr=1;
 			}	
 		}
 		if($flgErr==1)
 		{
-			$cookieUserId = array(
-				'name'   => 'userId',
-				'value'  => $id,
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
-			set_cookie($cookieUserId);
-			$cookieUserName = array(
-				'name'   => 'userName',
-				'value'  => $userName,
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
-			set_cookie($cookieUserName);
-			$cookieFname = array(
-				'name'   => 'fname',
-				'value'  => $fName,
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
-			set_cookie($cookieFname);
-			$cookieLname = array(
-				'name'   => 'lname',
-				'value'  => $lName,
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
-			set_cookie($cookieLname);
-			$cookieEmail = array(
-				'name'   => 'email',
-				'value'  => $email,
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
-			set_cookie($cookieEmail);
-			$cookieErr = array(
-				'name'   => 'error',
-				'value'  => 'Your form has errors.',
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
-			set_cookie($cookieErr);
-			$cookieshowPopup = array(
-				'name'   => 'showPopup',
-				'value'  => 'true',
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
-			set_cookie($cookieshowPopup);
+			$sessionUserId = array('userId' => $id,);
+			$this->session->set_userdata($sessionUserId);
+			
+			$sessionUserName = array('userName' => $userName,);
+			$this->session->set_userdata($sessionUserName);
+				
+			$sessionArray = array('fname' => $fName,);
+			$this->session->set_userdata($sessionArray);
+				
+			$sessionlname = array('lname' => $lName,);
+			$this->session->set_userdata($sessionlname);
+				
+			$sessionemail = array('email' => $email,);
+			$this->session->set_userdata($sessionemail);
+				
+			$sessionErr = array('error' => 'Your form has errors.',);
+			$this->session->set_userdata($sessionErr);
+				
+			$sessionPopup = array('showPopup' => 'true',);
+			$this->session->set_userdata($sessionPopup);
 		}
 		else
 		{
@@ -185,26 +115,15 @@ class Ourpattern extends Controller {
 			if($id=='')
 			{
 				$this->Ourpattern_model->insertUser($dataAdd);
-				$cookie = array(
-				'name'   => 'successMessage',
-				'value'  => 'Successfully Added a user.',
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
+				
+				 $sessionSuccess = array('successMessage' => 'Successfully Added a user.',);
 			}
 			else
 			{
 				$this->Ourpattern_model->updateUser($dataAdd,$id);
-				$cookie = array(
-				'name'   => 'successMessage',
-				'value'  => 'Successfully Updated a user.',
-				'expire' => '86500',
-				'domain' => '',
-				'prefix' => ''
-				);
+				 $sessionSuccess = array('successMessage' => 'Successfully Updated a user.',);
 			}
-			set_cookie($cookie);
+			$this->session->set_userdata($sessionSuccess);
 		}
 		redirect('ourpattern');
 	}

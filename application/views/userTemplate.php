@@ -14,18 +14,18 @@
 
 	</head>
 	<body>
-		<?php
-		$successCookie=get_cookie('successMessage');
-		if($successCookie!='')
+		<?php $successSesion='';
+		if(isset($this->session->userdata['successMessage']))
 		{
 		?>
 			<div class="row-fluid" id="successMsg">
 				<div class="offset3 span6 alert alert-success">
-					<?php echo $successCookie; ?>
+					<?php echo $this->session->userdata['successMessage']; ?>
 				</div>
 			</div>
 		<?php
-		delete_cookie("successMessage");
+		
+		$this->session->unset_userdata('successMessage');
 		}
 		?>
 		<?php $this->load->view($view); ?>

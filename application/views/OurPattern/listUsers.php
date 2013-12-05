@@ -2,15 +2,19 @@
 	<div class="container"> 
 		<div class="content rt">
 			<h4><?php echo $title; ?></h4>
-			<?php
-			$showPopupCookie=get_cookie('showPopup');
+			<?php $showPopupSession='';
+			if(isset($this->session->userdata['showPopup']))
+			{
+				$showPopupSession=$this->session->userdata['showPopup'];
+			}
 			?>
-			<div id="addEditPatternModal" class="modal hide <?php if($showPopupCookie=='true') { ?>in<?php } ?>" tabindex="-1" role="dialog" data-backdrop="true" aria-labelledby="addEditModalLabel" aria-hidden="<?php if($showPopupCookie=='true') { ?>false<?php } else { ?>true<?php } ?>" <?php if($showPopupCookie=='true') { ?>style="display: block;"<?php } ?> >
+			<div id="addEditPatternModal" class="modal hide <?php if($showPopupSession=='true') { ?>in<?php } ?>" tabindex="-1" role="dialog" data-backdrop="true" aria-labelledby="addEditModalLabel" aria-hidden="<?php if($showPopupSession=='true') { ?>false<?php } else { ?>true<?php } ?>" <?php if($showPopupSession=='true') { ?>style="display: block;"<?php } ?> >
 				<?php
-				if($showPopupCookie=='true')
+				if($showPopupSession=='true')
 				{
-				$data["id"]=get_cookie('userId');
+				$data["id"]=$this->session->userdata['userId'];
 				$data["users"]=array();
+				
 				?>
 				<?php $this->load->view('OurPattern/ajaxAddEdit',$data); ?>
 				<script type="text/javascript">
@@ -19,7 +23,7 @@
 				   });
 				</script>
 				<?php
-				delete_cookie("showPopup");
+				$this->session->unset_userdata('showPopup');
 				}
 				?>
 			</div>
@@ -103,3 +107,13 @@
 		</div>
 	</div>
 </div>
+<?php
+$this->session->unset_userdata('error');
+$this->session->unset_userdata('firstnameerr');
+$this->session->unset_userdata('lastnameerr');
+$this->session->unset_userdata('emailiderr');
+$this->session->unset_userdata('fname');
+$this->session->unset_userdata('lname');
+$this->session->unset_userdata('email');
+$this->session->unset_userdata('userName');
+?>
